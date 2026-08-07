@@ -1,13 +1,9 @@
-# The Process — ArcGIS × Data × AI
+# Develop with ArcGIS 
 
 An interactive, single-page explainer that tells the story of how **domain
 expertise**, the **ArcGIS Maps SDK for JavaScript**, and **AI prompt
 engineering** (GitHub Copilot + AI agents) combine to build custom mapping
 applications — 2D or 3D — from any data type or system.
-
-Dark, "GitHub Universe meets cyberpunk" aesthetic: glassmorphism cards, neon
-glows, an animated backdrop, a live typing terminal, an Executive/Geek toggle,
-and an educational breakdown of the toolchain.
 
 ## Tech stack
 
