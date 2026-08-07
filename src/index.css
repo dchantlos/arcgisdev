@@ -1,0 +1,375 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens (Tailwind v4 CSS-first config)                      */
+/*  These become utilities, e.g. bg-ink-900, text-neon-cyan,          */
+/*  font-display, animate-float, shadow-glow-cyan.                    */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* Deep space "ink" background scale */
+  --color-ink-950: #030509;
+  --color-ink-900: #050814;
+  --color-ink-850: #070b1a;
+  --color-ink-800: #0a0e20;
+  --color-ink-700: #0f1530;
+  --color-ink-600: #161d3f;
+
+  /* Esri Developer accents: spatial blues, mapping teals & greens.
+     (Token names kept as `neon-*` so every component re-themes at once.) */
+  --color-neon-cyan: #38bdf8; /* bright data / sky blue */
+  --color-neon-blue: #0079c1; /* Esri Blue, primary accent */
+  --color-neon-violet: #a97bf4; /* ArcGIS Developer purple */
+  --color-neon-pink: #2dd4bf; /* bright teal node */
+  --color-neon-green: #34d399; /* emerald, data / success */
+  --color-neon-amber: #f59e0b; /* warm accent */
+
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Named animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-float-fast: float 4s ease-in-out infinite;
+  --animate-pulse-glow: pulseGlow 4s ease-in-out infinite;
+  --animate-gradient: gradientShift 8s ease infinite;
+  --animate-spin-slow: spinSlow 16s linear infinite;
+  --animate-spin-rev: spinRev 22s linear infinite;
+  --animate-blink: blink 1.05s step-end infinite;
+  --animate-aurora: aurora 20s ease infinite;
+  --animate-scan: scan 5s linear infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-dash: dash 3s linear infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Keyframes                                                          */
+/* ------------------------------------------------------------------ */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-18px) translateX(6px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+    filter: blur(38px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(52px);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinRev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translate(6%, -4%) scale(1.15);
+    opacity: 0.85;
+  }
+  66% {
+    transform: translate(-5%, 5%) scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base layer                                                        */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    color: #e6ecff;
+    background-color: var(--color-ink-900);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-neon-cyan) 40%, transparent);
+    color: #fff;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      var(--color-neon-blue),
+      var(--color-neon-violet)
+    );
+    border-radius: 9999px;
+    border: 2px solid var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(var(--color-neon-cyan), var(--color-neon-pink));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reusable component utilities                                      */
+/* ------------------------------------------------------------------ */
+
+/* Glassmorphism surfaces */
+@utility glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.02)
+  );
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@utility glass-strong {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.03)
+  );
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Gradient text */
+@utility text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-neon-cyan),
+    var(--color-neon-blue),
+    var(--color-neon-violet)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@utility text-gradient-animated {
+  background: linear-gradient(
+    100deg,
+    var(--color-neon-cyan),
+    var(--color-neon-blue),
+    var(--color-neon-violet),
+    var(--color-neon-cyan)
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: var(--animate-gradient);
+}
+
+/* Glow shadows */
+@utility shadow-glow-cyan {
+  box-shadow:
+    0 0 24px -4px color-mix(in oklab, var(--color-neon-cyan) 55%, transparent),
+    0 0 60px -20px color-mix(in oklab, var(--color-neon-cyan) 50%, transparent);
+}
+@utility shadow-glow-violet {
+  box-shadow:
+    0 0 24px -4px color-mix(in oklab, var(--color-neon-violet) 55%, transparent),
+    0 0 60px -20px color-mix(in oklab, var(--color-neon-violet) 50%, transparent);
+}
+@utility shadow-glow-pink {
+  box-shadow:
+    0 0 24px -4px color-mix(in oklab, var(--color-neon-pink) 55%, transparent),
+    0 0 60px -20px color-mix(in oklab, var(--color-neon-pink) 50%, transparent);
+}
+
+/* Neon text glow */
+@utility text-glow-cyan {
+  text-shadow:
+    0 0 12px color-mix(in oklab, var(--color-neon-cyan) 70%, transparent),
+    0 0 30px color-mix(in oklab, var(--color-neon-cyan) 45%, transparent);
+}
+
+/* Grid / blueprint backgrounds */
+@utility bg-grid {
+  background-image:
+    linear-gradient(rgba(120, 160, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 160, 255, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(
+    rgba(120, 160, 255, 0.16) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+}
+
+/* Card hairline + depth */
+@utility ring-glow {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 10px 40px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Neon range slider (Case Study time-slider)                        */
+/* ------------------------------------------------------------------ */
+.slider-neon {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-neon-cyan),
+    var(--color-neon-blue),
+    var(--color-neon-violet)
+  );
+  outline: none;
+  cursor: pointer;
+}
+.slider-neon::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: #e6ecff;
+  border: 3px solid var(--color-neon-cyan);
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 238, 0.2),
+    0 0 18px 2px rgba(34, 211, 238, 0.6);
+  transition: transform 0.15s ease;
+}
+.slider-neon::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.slider-neon::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: #e6ecff;
+  border: 3px solid var(--color-neon-cyan);
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 238, 0.2),
+    0 0 18px 2px rgba(34, 211, 238, 0.6);
+}
+.slider-neon:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 238, 0.35),
+    0 0 22px 4px rgba(34, 211, 238, 0.8);
+}
+
+/* Reduced motion: quiet the ambient animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
