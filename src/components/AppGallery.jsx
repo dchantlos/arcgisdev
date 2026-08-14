@@ -35,12 +35,14 @@ const APPS = [
   {
     name: 'Gaussian Splat Explorer',
     problem:
-      'A cinematic explorer for 11 public ArcGIS Gaussian Splat reality captures, with a capture gallery, auto-fly tour, and Slice, Line of sight, Elevation profile and 3D Measure tools that work directly on the splats.',
-    tags: ['ArcGIS Maps SDK', 'Gaussian Splats', 'Reality Capture', '3D Scene'],
+      'A cinematic explorer for 11 public ArcGIS Gaussian Splat reality captures, with a capture gallery, auto-fly tour, and Slice, Line of sight, Elevation profile and 3D Measure tools that work directly on the splats. Live weather data drives real-time rain and cloud effects in the scene via the ArcGIS Maps SDK for JavaScript.',
+    tags: ['ArcGIS Maps SDK', 'Gaussian Splats', 'Reality Capture', 'Live Weather'],
     status: 'Live',
     glow: 'violet',
     color: 'var(--color-neon-violet)',
     image: gaussianSplatCard,
+    liveWeather: true,
+    hours: 1,
     prompt:
       "Rebuild Esri's Gaussian Splat Explorer as a standalone 3D app that browses public reality-capture splats, flies a cinematic tour, and runs Slice, Line of sight, Elevation profile and Measure directly on the Gaussian Splat layers.",
     link: 'https://dchantlos.github.io/3dgs/',
@@ -161,7 +163,7 @@ export function AppGallery() {
                       {app.hours && (
                         <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-amber/40 bg-neon-amber/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-amber">
                           <Clock className="h-3 w-3" />
-                          Built by 1 user in {app.hours} hours
+                          Built by 1 user in {app.hours} {app.hours === 1 ? 'hour' : 'hours'}
                         </span>
                       )}
                       {app.liveWeather && (
