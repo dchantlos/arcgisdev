@@ -11,6 +11,7 @@ import { TiltCard } from './ui/TiltCard';
 import { GithubIcon } from './ui/GithubIcon';
 import { fadeUp, stagger, viewport } from '../lib/motion';
 import badouziCard from '../assets/BadouziCard2.jpg';
+import gaussianSplatCard from '../assets/GaussianSplatCard.jpg';
 
 // Each object below renders one card. Adding an app/toolkit to the catalog is
 // just adding an entry here; there is no layout code to touch. Entries flagged
@@ -31,7 +32,19 @@ const APPS = [
       'Build a 3D ArcGIS app for Badouzi Fishing Port that streams in live weather data, simulates tidal and storm-surge scenarios, visualizes inundation depth, and reports estimated value at risk.',
     link: 'https://dchantlos.github.io/Badouzi/',
   },
-  { comingSoon: true, glow: 'violet' },
+  {
+    name: 'Gaussian Splat Explorer',
+    problem:
+      'A cinematic explorer for 11 public ArcGIS Gaussian Splat reality captures, with a capture gallery, auto-fly tour, and Slice, Line of sight, Elevation profile and 3D Measure tools that work directly on the splats.',
+    tags: ['ArcGIS Maps SDK', 'Gaussian Splats', 'Reality Capture', '3D Scene'],
+    status: 'Live',
+    glow: 'violet',
+    color: 'var(--color-neon-violet)',
+    image: gaussianSplatCard,
+    prompt:
+      "Rebuild Esri's Gaussian Splat Explorer as a standalone 3D app that browses public reality-capture splats, flies a cinematic tour, and runs Slice, Line of sight, Elevation profile and Measure directly on the Gaussian Splat layers.",
+    link: 'https://dchantlos.github.io/3dgs/',
+  },
   { comingSoon: true, glow: 'pink' },
 ];
 
@@ -143,18 +156,22 @@ export function AppGallery() {
                 {/* body */}
                 <div className="flex flex-1 flex-col gap-3 p-5">
                   {/* proof badges */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-amber/40 bg-neon-amber/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-amber">
-                      <Clock className="h-3 w-3" />
-                      Built by 1 user in {app.hours} hours
-                    </span>
-                    {app.liveWeather && (
-                      <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-cyan/40 bg-neon-cyan/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-cyan">
-                        <CloudSun className="h-3 w-3" />
-                        Live weather data
-                      </span>
-                    )}
-                  </div>
+                  {(app.hours || app.liveWeather) && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      {app.hours && (
+                        <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-amber/40 bg-neon-amber/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-amber">
+                          <Clock className="h-3 w-3" />
+                          Built by 1 user in {app.hours} hours
+                        </span>
+                      )}
+                      {app.liveWeather && (
+                        <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-cyan/40 bg-neon-cyan/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-cyan">
+                          <CloudSun className="h-3 w-3" />
+                          Live weather data
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-semibold text-white">
