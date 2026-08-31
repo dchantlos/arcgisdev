@@ -210,17 +210,13 @@ export function Hero() {
 
           <motion.div
             variants={fadeUp}
-            className="mt-6 inline-flex items-center gap-2.5 rounded-xl border border-neon-amber/30 bg-neon-amber/[0.06] px-3 py-2 text-xs shadow-[0_0_28px_-10px_var(--color-neon-amber)] lg:whitespace-nowrap"
+            className="mt-6 inline-flex items-center gap-2.5 rounded-xl border border-neon-amber/30 bg-neon-amber/[0.06] px-3 py-2 shadow-[0_0_28px_-10px_var(--color-neon-amber)] lg:whitespace-nowrap"
           >
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-neon-amber/15">
               <Zap className="h-3.5 w-3.5 text-neon-amber" />
             </span>
-            <span className="text-slate-200">
-              <span className="font-semibold text-neon-amber">
-                Your New Superpower:
-              </span>{' '}
-              Go from an idea in your head to a live, custom web app{' '}
-              <span className="font-semibold text-white">in an afternoon.</span>
+            <span className="text-base font-bold text-neon-amber">
+              Go from an idea to a live, custom web app in an afternoon.
             </span>
           </motion.div>
 
