@@ -5,7 +5,7 @@ import { GithubIcon } from './ui/GithubIcon';
 import esriDevelopers from '../assets/esri-developers.png';
 
 const LINKS = [
-  { label: 'The Ensemble', href: '#ensemble' },
+  { label: 'How It Works', href: '#ensemble' },
   { label: 'The Human', href: '#human' },
   { label: 'The Toolchain', href: '#toolchain' },
   { label: 'App Catalog', href: '#solutions' },

@@ -51,7 +51,7 @@ function TerminalWindow() {
         <span className="h-3 w-3 rounded-full bg-[#28c840]" />
         <span className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 font-mono text-xs text-slate-400">
           <FileCode className="h-3.5 w-3.5" />
-          App.jsx — GitHub Codespaces
+          App.jsx · GitHub Codespaces
         </span>
         <span className="ml-auto flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-neon-green">
           <Radio className="h-3 w-3 animate-pulse" />
@@ -139,7 +139,7 @@ export function PromptBridge() {
               It starts with the ask. You describe what you want in natural
               language, directing the architecture, the UI, the data connections
               and the exact <SdkLink label="ArcGIS Maps SDK" /> behaviour. You
-              own the logic, the AI owns the syntax.
+              own the logic, the AI writes the syntax.
             </>
           }
           className="mb-14"
