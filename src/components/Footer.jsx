@@ -129,7 +129,12 @@ export function Footer() {
 
       {/* bottom bar */}
       <div className="relative mx-auto mt-20 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/10 py-8 sm:flex-row">
-        <div className="flex items-center gap-3">
+        <a
+          href="https://developers.arcgis.com/"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-80"
+        >
           <img
             src={esriDevelopers}
             alt="Esri Developers"
@@ -138,7 +143,7 @@ export function Footer() {
           <span className="text-sm font-semibold text-white">
             Develop with <span className="text-gradient">ArcGIS</span>
           </span>
-        </div>
+        </a>
         <p className="text-xs text-slate-500">
           © {new Date().getFullYear()} · ArcGIS × Data × AI
         </p>

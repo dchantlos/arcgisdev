@@ -9,10 +9,12 @@ import { Ensemble } from './components/Ensemble';
 import { WhatYouCanBuild } from './components/WhatYouCanBuild';
 import { AppGallery } from './components/AppGallery';
 import { Footer } from './components/Footer';
+import { RotateGate } from './components/RotateGate';
 
 function App() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-ink-900 text-slate-100 antialiased">
+      <RotateGate />
       <AnimatedBackground />
       <Navbar />
       <main>

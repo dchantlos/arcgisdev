@@ -452,13 +452,13 @@ export function Hero() {
         </div>
       </div>
 
-      {/* scroll cue */}
+      {/* scroll cue — hidden on phones where the vertical paradigm would overlap it */}
       <motion.a
         href="#human"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4 }}
-        className="absolute inset-x-0 bottom-6 mx-auto flex w-max flex-col items-center gap-2 text-xs uppercase tracking-[0.25em] text-slate-400"
+        className="absolute inset-x-0 bottom-6 mx-auto hidden w-max flex-col items-center gap-2 text-xs uppercase tracking-[0.25em] text-slate-400 sm:flex"
       >
         Scroll
         <motion.span

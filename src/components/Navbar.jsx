@@ -45,7 +45,12 @@ export function Navbar() {
         }`}
       >
         {/* Brand */}
-        <a href="#top" className="group flex items-center gap-3">
+        <a
+          href="https://developers.arcgis.com/"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center gap-3"
+        >
           <span className="relative flex h-9 w-9 items-center justify-center">
             <img
               src={esriDevelopers}
@@ -54,7 +59,7 @@ export function Navbar() {
             />
             <span className="absolute inset-0 -z-10 rounded-xl bg-neon-blue/40 opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-100" />
           </span>
-          <span className="hidden text-sm font-semibold tracking-tight text-white sm:block">
+          <span className="block text-sm font-semibold tracking-tight text-white">
             Develop with <span className="text-gradient">ArcGIS</span>
           </span>
         </a>

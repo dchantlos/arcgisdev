@@ -70,7 +70,7 @@ function TerminalWindow() {
           </div>
 
           {/* code */}
-          <div className="flex-1 overflow-x-auto whitespace-pre">
+          <div className="min-w-0 flex-1 overflow-x-auto whitespace-pre">
             {CODE_LINES.map((line, i) => (
               <div
                 key={i}
@@ -184,12 +184,13 @@ export function PromptBridge() {
         </motion.div>
 
         {/* Terminal + role split */}
-        <div className="grid items-stretch gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <motion.div
             variants={fromLeft}
             initial="hidden"
             whileInView="show"
             viewport={viewport}
+            className="min-w-0"
           >
             <TerminalWindow />
           </motion.div>
@@ -199,7 +200,7 @@ export function PromptBridge() {
             initial="hidden"
             whileInView="show"
             viewport={viewport}
-            className="grid gap-6"
+            className="grid min-w-0 gap-6"
           >
             <TiltCard glow="cyan" animate={false} className="p-6">
               <div className="mb-3 inline-flex rounded-xl bg-neon-cyan/15 p-3">

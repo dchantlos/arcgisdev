@@ -373,3 +373,103 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Mobile portrait lock                                              */
+/*  On phones held in landscape, cover the page with a "rotate to     */
+/*  portrait" prompt. The reveal is gated by touch-input + phone-width */
+/*  checks so desktops (mouse/trackpad) and tablets are never affected.*/
+/* ------------------------------------------------------------------ */
+.rotate-gate {
+  display: none;
+}
+
+.rotate-gate__inner {
+  display: flex;
+  max-width: 22rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.rotate-gate__icon {
+  position: relative;
+  display: grid;
+  height: 4.75rem;
+  width: 4.75rem;
+  place-items: center;
+  border-radius: 1.25rem;
+  color: var(--color-neon-cyan);
+  border: 1px solid color-mix(in oklab, var(--color-neon-cyan) 35%, transparent);
+  background: color-mix(in oklab, var(--color-neon-cyan) 9%, transparent);
+  box-shadow: 0 0 44px -12px var(--color-neon-cyan);
+}
+.rotate-gate__icon > svg {
+  height: 2.3rem;
+  width: 2.3rem;
+  animation: rotateHint 2.6s ease-in-out infinite;
+}
+.rotate-gate__spin {
+  position: absolute;
+  right: -0.4rem;
+  bottom: -0.4rem;
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+  padding: 0.2rem;
+  border-radius: 9999px;
+  color: var(--color-ink-950);
+  background: var(--color-neon-cyan);
+  animation: none !important;
+}
+
+.rotate-gate__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.rotate-gate__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #b9c2dc;
+}
+
+@keyframes rotateHint {
+  0%,
+  55%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25%,
+  40% {
+    transform: rotate(-90deg);
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 960px) and (hover: none) and (pointer: coarse) {
+  .rotate-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    background: radial-gradient(
+      130% 130% at 50% 0%,
+      var(--color-ink-800),
+      var(--color-ink-950) 70%
+    );
+  }
+
+  /* freeze the page behind the overlay */
+  html,
+  body {
+    overflow: hidden;
+  }
+}
