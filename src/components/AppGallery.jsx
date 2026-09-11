@@ -5,11 +5,15 @@ import {
   ArrowUpRight,
   Clock,
   Sparkles,
+  Boxes,
+  Radio,
+  Layers,
 } from 'lucide-react';
 import { SectionHeading } from './ui/SectionHeading';
 import { TiltCard } from './ui/TiltCard';
 import { GithubIcon } from './ui/GithubIcon';
 import { fadeUp, stagger, viewport } from '../lib/motion';
+import constructionCard from '../assets/ConstructionTimelapseCard.jpg';
 import badouziCard from '../assets/BadouziCard2.jpg';
 import gaussianSplatCard from '../assets/GaussianSplatCard.jpg';
 
@@ -17,6 +21,31 @@ import gaussianSplatCard from '../assets/GaussianSplatCard.jpg';
 // just adding an entry here; there is no layout code to touch. Entries flagged
 // comingSoon render a placeholder panel.
 const APPS = [
+  {
+    name: 'Construction Timelapse',
+    problem:
+      'A 4D/5D construction digital twin of Meridian Tower that plays the build schedule back in 3D, audits the IFC model against a buildingSMART IDS, streams live site conditions from ArcGIS Velocity, and reconciles progress to cost with an AIA G702/G703 application for payment.',
+    tags: [
+      'ArcGIS Maps SDK',
+      'buildingSMART',
+      'Planning',
+      'Construction Monitoring',
+      'ERP',
+    ],
+    status: 'Live',
+    glow: 'cyan',
+    color: 'var(--color-neon-cyan)',
+    image: constructionCard,
+    hours: 12,
+    badges: [
+      { label: 'openBIM IFC-IDS-BCF', icon: Boxes },
+      { label: 'Live ArcGIS Velocity Feeds', icon: Radio },
+      { label: '4D & 5D', icon: Layers },
+    ],
+    prompt:
+      'Build a 4D construction timelapse of a high-rise digital twin: stream the IFC model as I3S, play the schedule in 3D, audit it against a buildingSMART IDS, export BCF issues, overlay live ArcGIS Velocity site sensors, and tie progress to a 5D cost and payment report.',
+    link: 'https://dchantlos.github.io/construction-timelapse/',
+  },
   {
     name: 'Badouzi Fishing Port',
     problem:
@@ -47,7 +76,6 @@ const APPS = [
       "Rebuild Esri's Gaussian Splat Explorer as a standalone 3D app that browses public reality-capture splats, flies a cinematic tour, and runs Slice, Line of sight, Elevation profile and Measure directly on the Gaussian Splat layers.",
     link: 'https://dchantlos.github.io/3dgs/',
   },
-  { comingSoon: true, glow: 'pink' },
 ];
 
 export function AppGallery() {
@@ -158,7 +186,7 @@ export function AppGallery() {
                 {/* body */}
                 <div className="flex flex-1 flex-col gap-3 p-5">
                   {/* proof badges */}
-                  {(app.hours || app.liveWeather) && (
+                  {(app.hours || app.liveWeather || app.badges) && (
                     <div className="flex flex-wrap items-center gap-2">
                       {app.hours && (
                         <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-amber/40 bg-neon-amber/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-amber">
@@ -172,6 +200,15 @@ export function AppGallery() {
                           Live weather data
                         </span>
                       )}
+                      {app.badges?.map((b) => (
+                        <span
+                          key={b.label}
+                          className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon-cyan/40 bg-neon-cyan/[0.06] px-2.5 py-1 text-[11px] font-semibold text-neon-cyan"
+                        >
+                          <b.icon className="h-3 w-3" />
+                          {b.label}
+                        </span>
+                      ))}
                     </div>
                   )}
 
