@@ -20,6 +20,7 @@ import { GlassCard } from './ui/GlassCard';
 import { TiltCard } from './ui/TiltCard';
 import { SdkLink } from './ui/SdkLink';
 import { fadeUp, stagger } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 /* ------------------------- Executive view ------------------------- */
 const EXEC_CARDS = [
@@ -29,6 +30,10 @@ const EXEC_CARDS = [
     glow: 'cyan',
     title: 'Instant Setup',
     body: 'GitHub Copilot and AI agents stand up the entire Vite + React environment (config, structure and tooling) in seconds instead of hours.',
+    zh: {
+      title: '秒速完成設定',
+      body: 'GitHub Copilot 與 AI 代理程式只需幾秒，就能建立完整的 Vite + React 環境（設定、結構與工具），不再需要耗費數小時。',
+    },
   },
   {
     icon: Boxes,
@@ -42,6 +47,15 @@ const EXEC_CARDS = [
         live data, in 2D or 3D.
       </>
     ),
+    zh: {
+      title: 'ArcGIS SDK 整合',
+      body: (
+        <>
+          最新版的 <SdkLink label="ArcGIS Maps SDK for JavaScript" />{' '}
+          已預先串接完成，直接指向您的 WebMap 或 WebScene、圖徵服務與即時資料，支援 2D 與 3D。
+        </>
+      ),
+    },
   },
   {
     icon: Layers3,
@@ -49,6 +63,10 @@ const EXEC_CARDS = [
     glow: 'pink',
     title: 'State & Logic',
     body: 'Component hierarchy, state and API calls are all handled by the AI, following your direction, so you never touch the wiring.',
+    zh: {
+      title: '狀態與邏輯',
+      body: '元件階層、狀態管理與 API 呼叫，全都由 AI 依照您的指示處理，您完全不必碰觸底層串接。',
+    },
   },
   {
     icon: GitBranch,
@@ -56,6 +74,10 @@ const EXEC_CARDS = [
     glow: 'blue',
     title: 'Deploy-Ready',
     body: 'The file structure and build config come ready for a clean, one-command GitHub Pages deployment, so you can ship the same day.',
+    zh: {
+      title: '隨時可部署',
+      body: '檔案結構與建置設定都已就緒，一個指令就能乾淨地部署到 GitHub Pages，當天就能上線。',
+    },
   },
 ];
 
@@ -86,18 +108,27 @@ const DEPS = [
   { name: 'lucide-react', version: '^0.400.0' },
 ];
 
-const CODE = `import MapView from "@arcgis/core/views/MapView";
+const code = (basemapNote, liveNote) => `import MapView from "@arcgis/core/views/MapView";
 import WebMap from "@arcgis/core/WebMap";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 
-// The user’s curated basemap (2D or 3D) as the foundation
+// ${basemapNote}
 const map = new WebMap({ portalItem: { id: "b4f…9c2" } });
 
-// AI wired a live source (sensors, Databricks, a warehouse…)
+// ${liveNote}
 map.add(new FeatureLayer({ url: liveDataServiceUrl }));
 
 const view = new MapView({ container: "viewDiv", map });
 view.ui.add(new Legend({ view }), "bottom-left");`;
+
+const CODE = code(
+  'The user’s curated basemap (2D or 3D) as the foundation',
+  'AI wired a live source (sensors, Databricks, a warehouse…)'
+);
+const CODE_ZH = code(
+  '以使用者彙整的底圖（2D 或 3D）作為基礎',
+  'AI 串接了一個即時資料來源（感測器、Databricks、資料倉儲…）'
+);
 
 function TreeIcon({ type }) {
   const cls = 'h-4 w-4 shrink-0';
@@ -114,6 +145,7 @@ function TreeIcon({ type }) {
 }
 
 function GeekView() {
+  const { tr } = useI18n();
   return (
     <motion.div
       key="geek"
@@ -126,7 +158,7 @@ function GeekView() {
       {/* File tree */}
       <GlassCard glow="cyan" animate={false} className="p-5 lg:col-span-1">
         <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Folder className="h-4 w-4" /> File Structure
+          <Folder className="h-4 w-4" /> {tr('File Structure', '檔案結構')}
         </div>
         <motion.ul
           variants={stagger(0.05)}
@@ -154,17 +186,17 @@ function GeekView() {
           <FileCode2 className="h-3.5 w-3.5 text-neon-violet" />
           src/components/MapView.jsx
           <span className="ml-auto flex items-center gap-1.5 text-neon-green">
-            <Cpu className="h-3 w-3" /> AI-generated
+            <Cpu className="h-3 w-3" /> {tr('AI-generated', 'AI 產生')}
           </span>
         </div>
         <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed text-slate-300">
-          <code>{CODE}</code>
+          <code>{tr(CODE, CODE_ZH)}</code>
         </pre>
 
         {/* dependencies */}
         <div className="border-t border-white/10 p-5">
           <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <Package className="h-4 w-4" /> package.json · dependencies
+            <Package className="h-4 w-4" /> package.json · {tr('dependencies', '相依套件')}
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
             {DEPS.map((d) => (
@@ -190,6 +222,7 @@ function GeekView() {
 }
 
 function ExecView() {
+  const { loc } = useI18n();
   return (
     <motion.div
       key="exec"
@@ -200,25 +233,29 @@ function ExecView() {
       variants={stagger(0.1)}
       className="grid gap-6 sm:grid-cols-2"
     >
-      {EXEC_CARDS.map((c) => (
-        <TiltCard key={c.title} glow={c.glow} className="p-6">
-          <div
-            className="mb-4 inline-flex rounded-xl p-3"
-            style={{
-              background: `color-mix(in oklab, ${c.color} 18%, transparent)`,
-            }}
-          >
-            <c.icon className="h-7 w-7" style={{ color: c.color }} />
-          </div>
-          <h3 className="mb-2 text-xl font-semibold text-white">{c.title}</h3>
-          <p className="text-sm leading-relaxed text-slate-300/80">{c.body}</p>
-        </TiltCard>
-      ))}
+      {EXEC_CARDS.map((card) => {
+        const c = loc(card);
+        return (
+          <TiltCard key={card.title} glow={c.glow} className="p-6">
+            <div
+              className="mb-4 inline-flex rounded-xl p-3"
+              style={{
+                background: `color-mix(in oklab, ${c.color} 18%, transparent)`,
+              }}
+            >
+              <c.icon className="h-7 w-7" style={{ color: c.color }} />
+            </div>
+            <h3 className="mb-2 text-xl font-semibold text-white">{c.title}</h3>
+            <p className="text-sm leading-relaxed text-slate-300/80">{c.body}</p>
+          </TiltCard>
+        );
+      })}
     </motion.div>
   );
 }
 
 export function AIEngine() {
+  const { tr } = useI18n();
   const [geek, setGeek] = useState(false);
 
   return (
@@ -235,7 +272,7 @@ export function AIEngine() {
           <span className="font-mono text-sm text-neon-pink">04</span>
           <span className="h-px w-12 bg-gradient-to-r from-neon-pink to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            The AI Engine Room
+            {tr('The AI Engine Room', 'AI 引擎室')}
           </span>
         </div>
 
@@ -243,21 +280,32 @@ export function AIEngine() {
           <SectionHeading
             align="left"
             icon={Server}
-            eyebrow="GitHub Copilot + AI Agents · The Result"
-            title={
+            eyebrow={tr(
+              'GitHub Copilot + AI Agents · The Result',
+              'GitHub Copilot + AI 代理程式 · 成果'
+            )}
+            title={tr(
               <>
                 From your prompt to a{' '}
                 <span className="text-gradient">finished app</span>
+              </>,
+              <>
+                從您的提示詞
+                <br />
+                到<span className="text-gradient">完成的應用程式</span>
               </>
-            }
-            subtitle="Now here's what comes back. From that one prompt, the AI scaffolds the whole project, wires in your data and hands you a complete, deploy-ready app in seconds."
+            )}
+            subtitle={tr(
+              "Now here's what comes back. From that one prompt, the AI scaffolds the whole project, wires in your data and hands you a complete, deploy-ready app in seconds.",
+              '接下來看看會得到什麼。只要一段提示詞，AI 就能搭建整個專案架構、串接您的資料，並在幾秒內交給您一個完整、可立即部署的應用程式。'
+            )}
           />
 
           {/* View toggle */}
           <div className="flex shrink-0 items-center gap-1 rounded-2xl glass p-1.5">
             {[
-              { key: false, label: 'Executive', icon: Braces },
-              { key: true, label: 'Geek', icon: FileCode2 },
+              { key: false, label: 'Executive View', zh: '主管視角', icon: Braces },
+              { key: true, label: 'Geek View', zh: '工程師視角', icon: FileCode2 },
             ].map((opt) => {
               const activeState = geek === opt.key;
               return (
@@ -277,7 +325,7 @@ export function AIEngine() {
                     />
                   )}
                   <opt.icon className="relative z-10 h-4 w-4" />
-                  <span className="relative z-10">{opt.label} View</span>
+                  <span className="relative z-10">{tr(opt.label, opt.zh)}</span>
                 </button>
               );
             })}

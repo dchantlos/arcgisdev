@@ -20,13 +20,14 @@ import {
 import { EsriIcon } from './ui/EsriIcon';
 import { SdkLink, ARCGIS_SDK_URL } from './ui/SdkLink';
 import { EASE, fadeUp, stagger } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 // The 4-step workflow paradigm, mirrored from the footer recap.
 const PARADIGM = [
-  { icon: BrainCircuit, label: 'Human', color: 'var(--color-neon-cyan)' },
-  { icon: Terminal, label: 'Prompt', color: 'var(--color-neon-violet)' },
+  { icon: BrainCircuit, label: 'Human', color: 'var(--color-neon-cyan)', zh: { label: '人類' } },
+  { icon: Terminal, label: 'Prompt', color: 'var(--color-neon-violet)', zh: { label: '提示詞' } },
   { icon: Cpu, label: 'AI', color: 'var(--color-neon-pink)' },
-  { icon: Boxes, label: 'Custom App', color: 'var(--color-neon-blue)' },
+  { icon: Boxes, label: 'Custom App', color: 'var(--color-neon-blue)', zh: { label: '客製化 App' } },
 ];
 
 // Each source is tinted by the kind of data/system it represents, so related
@@ -48,13 +49,13 @@ const SOURCES = [
   { label: 'Civil 3D', group: 'aec', left: '79%', top: '10%' },
   { label: 'Microsoft', group: 'business', left: '50%', top: '95%' },
   { label: 'Databricks', group: 'data', left: '11%', top: '28%' },
-  { label: 'Reality Capture', group: 'reality', left: '86%', top: '27%' },
-  { label: 'Sensor / IoT', group: 'realtime', left: '7%', top: '50%' },
-  { label: 'Data Lake', group: 'data', left: '92%', top: '50%' },
+  { label: 'Reality Capture', group: 'reality', left: '86%', top: '27%', zh: { label: '實景擷取' } },
+  { label: 'Sensor / IoT', group: 'realtime', left: '7%', top: '50%', zh: { label: '感測器 / IoT' } },
+  { label: 'Data Lake', group: 'data', left: '92%', top: '50%', zh: { label: '資料湖' } },
   { label: 'BIM', group: 'aec', left: '15%', top: '72%' },
-  { label: 'Point Cloud', group: 'reality', left: '84%', top: '72%' },
+  { label: 'Point Cloud', group: 'reality', left: '84%', top: '72%', zh: { label: '點雲' } },
   { label: 'LiDAR', group: 'reality', left: '31%', top: '90%' },
-  { label: 'Imagery', group: 'reality', left: '69%', top: '90%' },
+  { label: 'Imagery', group: 'reality', left: '69%', top: '90%', zh: { label: '影像' } },
   { label: 'SQL Server', group: 'data', left: '32%', top: '3%' },
   { label: 'Snowflake', group: 'data', left: '69%', top: '3%' },
   { label: 'Power BI', group: 'business', left: '6%', top: '68%' },
@@ -121,6 +122,7 @@ function FlowLine({ node, i, px, py, bend, hovered }) {
 
 export function Hero() {
   const ref = useRef(null);
+  const { tr, loc } = useI18n();
 
   // Mouse parallax
   const mx = useMotionValue(0);
@@ -174,37 +176,71 @@ export function Hero() {
             variants={fadeUp}
             className="text-sm font-semibold uppercase tracking-wider text-teal-400"
           >
-            Interactive Methodology Guide
+            {tr('Interactive Methodology Guide', '互動式方法指南')}
           </motion.span>
 
           <motion.div variants={fadeUp} className="space-y-3">
-            <h1 className="text-4xl font-bold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Unlock the Full Power of{' '}
-              <span className="text-gradient-animated">
-                ArcGIS APIs
-              </span>
+            <h1 className="break-keep text-4xl font-bold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              {tr(
+                <>
+                  Unlock the Full Power of{' '}
+                  <span className="text-gradient-animated">
+                    ArcGIS APIs
+                  </span>
+                </>,
+                <>
+                  全面釋放{' '}
+                  <span className="text-gradient-animated">ArcGIS API</span>{' '}
+                  的強大潛能
+                </>
+              )}
             </h1>
             <p className="text-xl font-semibold text-slate-200 sm:text-2xl">
-              How to Build Custom ArcGIS Web Apps
+              {tr(
+                'How to Build Custom ArcGIS Web Apps',
+                '如何打造客製化的 ArcGIS 網頁應用程式'
+              )}
             </p>
           </motion.div>
 
           <motion.div variants={fadeUp} className="max-w-xl space-y-4">
             <p className="text-base leading-relaxed text-slate-300/85">
-              You already know how to build great maps. Now, you can build
-              incredible web apps to go with them.
+              {tr(
+                <>
+                  You already know how to build great maps. Now, you can build
+                  incredible web apps to go with them.
+                </>,
+                <>
+                  您已經懂得如何製作出色的地圖。現在，您也能打造與之搭配、令人驚豔的網頁應用程式。
+                </>
+              )}
             </p>
             <p className="text-base leading-relaxed text-slate-300/85">
-              By pairing your GIS domain expertise with AI assistants, you can
-              skip the steep coding learning curve. AI acts as your personal
-              translator. You describe what you want the map to do in natural
-              language, and the AI writes the complex syntax required to build it
-              using the <SdkLink />.
+              {tr(
+                <>
+                  By pairing your GIS domain expertise with AI assistants, you can
+                  skip the steep coding learning curve. AI acts as your personal
+                  translator. You describe what you want the map to do in natural
+                  language, and the AI writes the complex syntax required to build it
+                  using the <SdkLink />.
+                </>,
+                <>
+                  結合您的 GIS 領域專業與 AI 助理，就能跳過陡峭的程式學習曲線。AI 就像您的專屬翻譯：您用自然語言描述想讓地圖做什麼，AI 便會使用{' '}
+                  <SdkLink />，寫出實作所需的複雜語法。
+                </>
+              )}
             </p>
             <p className="text-base leading-relaxed text-slate-300/85">
-              This interactive guide provides you with the framework to learn
-              how it&apos;s done, an inside look at the process from idea to
-              deployed app.
+              {tr(
+                <>
+                  This interactive guide provides you with the framework to learn
+                  how it&apos;s done, an inside look at the process from idea to
+                  deployed app.
+                </>,
+                <>
+                  這份互動式指南提供您一套學習框架，帶您深入了解從構想到應用程式部署上線的完整過程。
+                </>
+              )}
             </p>
           </motion.div>
 
@@ -216,7 +252,10 @@ export function Hero() {
               <Zap className="h-3.5 w-3.5 text-neon-amber" />
             </span>
             <span className="text-base font-bold text-neon-amber">
-              Go from an idea to a live, custom web app in an afternoon.
+              {tr(
+                'Go from an idea to a live, custom web app in an afternoon.',
+                '只要一個下午，就能把構想變成上線運作的客製化網頁應用程式。'
+              )}
             </span>
           </motion.div>
 
@@ -226,7 +265,7 @@ export function Hero() {
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-neon-cyan to-neon-blue px-6 py-3 text-sm font-semibold text-ink-950 transition-transform hover:scale-[1.03]"
             >
               <span className="absolute inset-0 -translate-x-full bg-white/30 transition-transform duration-500 group-hover:translate-x-full" />
-              See the Workflow
+              {tr('See the Workflow', '查看工作流程')}
               <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
             </a>
             <a
@@ -234,7 +273,7 @@ export function Hero() {
               className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-neon-violet/50 hover:shadow-glow-violet"
             >
               <LayoutGrid className="h-4 w-4" />
-              Jump to App Catalog
+              {tr('Jump to App Catalog', '前往應用程式目錄')}
             </a>
           </motion.div>
 
@@ -403,7 +442,7 @@ export function Hero() {
                     }}
                   >
                     <Box className="h-3 w-3 shrink-0" style={{ color }} />
-                    {s.label}
+                    {loc(s).label}
                   </motion.div>
                 </div>
               );
@@ -433,7 +472,7 @@ export function Hero() {
                     <step.icon className="h-6 w-6" style={{ color: step.color }} />
                   </span>
                   <span className="text-xs font-medium text-slate-300 sm:text-sm">
-                    {step.label}
+                    {loc(step).label}
                   </span>
                 </div>
                 {i < PARADIGM.length - 1 && (
@@ -460,7 +499,7 @@ export function Hero() {
         transition={{ delay: 1.4 }}
         className="absolute inset-x-0 bottom-6 mx-auto hidden w-max flex-col items-center gap-2 text-xs uppercase tracking-[0.25em] text-slate-400 sm:flex"
       >
-        Scroll
+        {tr('Scroll', '向下捲動')}
         <motion.span
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.6, repeat: Infinity }}

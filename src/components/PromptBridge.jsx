@@ -14,6 +14,7 @@ import { SectionHeading } from './ui/SectionHeading';
 import { TiltCard } from './ui/TiltCard';
 import { SdkLink } from './ui/SdkLink';
 import { fadeUp, stagger, viewport, fromLeft, fromRight } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 // Line 1 is the human's natural-language instruction; the lines below are
 // Copilot's ghosted code suggestion (what shows before you press Tab).
@@ -21,6 +22,7 @@ const CODE_LINES = [
   {
     t: '// Copilot: Load my 3D WebScene and add a Daylight widget tied to the Calcite UI.',
     ghost: false,
+    zh: { t: '// Copilot：載入我的 3D WebScene，並加入與 Calcite UI 搭配的 Daylight Widget。' },
   },
   { t: 'const view = new SceneView({', ghost: true },
   { t: '  map: webscene,', ghost: true },
@@ -33,12 +35,13 @@ const CODE_LINES = [
 
 // The pipeline stages between a human idea and AI-generated code
 const PIPELINE = [
-  { label: 'Human Intent', icon: UserCog, color: 'var(--color-neon-cyan)' },
-  { label: 'Structured Prompt', icon: Braces, color: 'var(--color-neon-violet)' },
-  { label: 'AI Build', icon: Cpu, color: 'var(--color-neon-pink)' },
+  { label: 'Human Intent', icon: UserCog, color: 'var(--color-neon-cyan)', zh: { label: '人類意圖' } },
+  { label: 'Structured Prompt', icon: Braces, color: 'var(--color-neon-violet)', zh: { label: '結構化提示詞' } },
+  { label: 'AI Build', icon: Cpu, color: 'var(--color-neon-pink)', zh: { label: 'AI 建置' } },
 ];
 
 function TerminalWindow() {
+  const { tr, loc } = useI18n();
   return (
     <div className="relative overflow-hidden rounded-2xl glass-strong ring-glow">
       {/* scanline sweep */}
@@ -55,7 +58,7 @@ function TerminalWindow() {
         </span>
         <span className="ml-auto flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-neon-green">
           <Radio className="h-3 w-3 animate-pulse" />
-          live
+          {tr('live', '即時')}
         </span>
       </div>
 
@@ -78,7 +81,7 @@ function TerminalWindow() {
                   line.ghost ? 'italic text-slate-500' : 'text-neon-cyan'
                 }
               >
-                {line.t || '\u00A0'}
+                {loc(line).t || '\u00A0'}
                 {i === 0 && (
                   <span className="animate-blink ml-0.5 inline-block h-3.5 w-[7px] translate-y-0.5 bg-neon-cyan align-middle" />
                 )}
@@ -91,11 +94,11 @@ function TerminalWindow() {
         <div className="absolute bottom-4 right-5">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-slate-300 backdrop-blur">
             <Sparkles className="h-3 w-3 text-neon-pink" />
-            Press
+            {tr('Press', '按下')}
             <kbd className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
               Tab
             </kbd>
-            to accept
+            {tr('to accept', '即可接受')}
           </span>
         </div>
       </div>
@@ -104,6 +107,7 @@ function TerminalWindow() {
 }
 
 export function PromptBridge() {
+  const { tr, loc } = useI18n();
   return (
     <section id="bridge" className="relative px-4 py-24 sm:px-6 md:py-32">
       {/* subtle divider glow */}
@@ -114,15 +118,15 @@ export function PromptBridge() {
           <span className="font-mono text-sm text-neon-violet">03</span>
           <span className="h-px w-12 bg-gradient-to-r from-neon-violet to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            The Bridge
+            {tr('The Bridge', '橋梁')}
           </span>
         </div>
 
         <SectionHeading
           align="left"
           icon={Terminal}
-          eyebrow="Prompt Engineering · The Ask"
-          title={
+          eyebrow={tr('Prompt Engineering · The Ask', '提示工程 · 提出需求')}
+          title={tr(
             <>
               The user directs{' '}
               <span className="text-2xl font-medium text-slate-400 sm:text-3xl">
@@ -132,16 +136,31 @@ export function PromptBridge() {
               <span className="text-2xl font-medium text-slate-400 sm:text-3xl">
                 (complex syntax).
               </span>
+            </>,
+            <>
+              使用者負責指揮
+              <span className="text-2xl font-medium text-slate-400 sm:text-3xl">
+                （白話的商業邏輯）
+              </span>
+              <br />
+              <span className="text-gradient">AI 負責建置</span>
+              <span className="text-2xl font-medium text-slate-400 sm:text-3xl">
+                （複雜的語法）
+              </span>
             </>
-          }
-          subtitle={
+          )}
+          subtitle={tr(
             <>
               It starts with the ask. You describe what you want in natural
               language, directing the architecture, the UI, the data connections
               and the exact <SdkLink label="ArcGIS Maps SDK" /> behaviour. You
               own the logic, the AI writes the syntax.
+            </>,
+            <>
+              一切從提出需求開始。您用自然語言描述想要的成果，主導架構、使用者介面、資料連線，以及{' '}
+              <SdkLink label="ArcGIS Maps SDK" /> 的確切行為。邏輯由您掌握，語法交給 AI 撰寫。
             </>
-          }
+          )}
           className="mb-14"
         />
 
@@ -168,7 +187,7 @@ export function PromptBridge() {
                   style={{ color: stage.color }}
                 />
                 <span className="text-sm font-semibold text-white">
-                  {stage.label}
+                  {loc(stage).label}
                 </span>
               </div>
               {i < PIPELINE.length - 1 && (
@@ -207,11 +226,13 @@ export function PromptBridge() {
                 <UserCog className="h-6 w-6 text-neon-cyan" />
               </div>
               <h3 className="mb-1.5 text-lg font-semibold text-white">
-                Architect of the Logic
+                {tr('Architect of the Logic', '邏輯的架構師')}
               </h3>
               <p className="text-sm leading-relaxed text-slate-300/80">
-                You define the data flow, component hierarchy, UX and the exact
-                ArcGIS behaviours. Every decision that matters is yours.
+                {tr(
+                  'You define the data flow, component hierarchy, UX and the exact ArcGIS behaviours. Every decision that matters is yours.',
+                  '您定義資料流、元件階層、使用者體驗，以及 ArcGIS 的確切行為。每一個關鍵決策都由您做主。'
+                )}
               </p>
             </TiltCard>
 
@@ -220,11 +241,13 @@ export function PromptBridge() {
                 <Bot className="h-6 w-6 text-neon-pink" />
               </div>
               <h3 className="mb-1.5 text-lg font-semibold text-white">
-                Builder of the Syntax
+                {tr('Builder of the Syntax', '語法的建造者')}
               </h3>
               <p className="text-sm leading-relaxed text-slate-300/80">
-                The AI turns your structured intent into correct, idiomatic
-                React + ArcGIS code, instantly and without typos.
+                {tr(
+                  'The AI turns your structured intent into correct, idiomatic React + ArcGIS code, instantly and without typos.',
+                  'AI 將您結構化的意圖轉換成正確、道地的 React + ArcGIS 程式碼，瞬間完成，而且沒有錯字。'
+                )}
               </p>
             </TiltCard>
           </motion.div>

@@ -1,4 +1,5 @@
 import { RotateCcw, Smartphone } from 'lucide-react';
+import { useI18n } from '../i18n/lang';
 
 /**
  * Full-screen prompt shown only on phones held in landscape. Visibility is
@@ -7,21 +8,29 @@ import { RotateCcw, Smartphone } from 'lucide-react';
  * never affected. The markup is always present; CSS decides when to reveal it.
  */
 export function RotateGate() {
+  const { tr } = useI18n();
   return (
     <div
       className="rotate-gate"
       role="alertdialog"
-      aria-label="Please rotate your device to portrait mode"
+      aria-label={tr(
+        'Please rotate your device to portrait mode',
+        '請將裝置轉為直向模式'
+      )}
     >
       <div className="rotate-gate__inner">
         <div className="rotate-gate__icon">
           <Smartphone strokeWidth={1.4} />
           <RotateCcw className="rotate-gate__spin" strokeWidth={1.6} />
         </div>
-        <h2 className="rotate-gate__title">Rotate your device</h2>
+        <h2 className="rotate-gate__title">
+          {tr('Rotate your device', '請旋轉您的裝置')}
+        </h2>
         <p className="rotate-gate__text">
-          This experience is built for portrait mode. Turn your phone upright to
-          continue.
+          {tr(
+            'This experience is built for portrait mode. Turn your phone upright to continue.',
+            '此體驗專為直向模式設計，請將手機轉為直向以繼續瀏覽。'
+          )}
         </p>
       </div>
     </div>

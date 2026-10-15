@@ -31,6 +31,7 @@ import { ARCGIS_SDK_URL } from './ui/SdkLink';
 import { CopyPromptButton } from './ui/CopyPromptButton';
 import { SecurityBadge } from './SecurityBadge';
 import { fadeUp, stagger, viewport } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 // A boilerplate prompt SEs can copy to kick-start an ArcGIS + React prototype.
 const COPILOT_STARTER_PROMPT = `Scaffold a Vite + React app that uses the ArcGIS Maps SDK for JavaScript.
@@ -39,6 +40,13 @@ const COPILOT_STARTER_PROMPT = `Scaffold a Vite + React app that uses the ArcGIS
 - Add a Legend, a Search widget, and a responsive glassmorphism side panel.
 - Keep ArcGIS view/layer objects out of React state; drive UI state with hooks.
 - Use an accessible dark theme and prepare the build for GitHub Pages.`;
+
+const COPILOT_STARTER_PROMPT_ZH = `建立一個使用 ArcGIS Maps SDK for JavaScript 的 Vite + React 應用程式。
+- 透過 @arcgis/core，以 portalItem id 載入 WebMap（2D）或 WebScene（3D）。
+- 延遲載入 SDK，並在串流載入期間顯示品牌化的載入畫面。
+- 加入 Legend、Search Widget，以及響應式的毛玻璃側邊面板。
+- 不要將 ArcGIS 的 view/layer 物件放進 React state；以 hooks 驅動 UI 狀態。
+- 使用符合無障礙標準的深色主題，並讓建置結果可部署到 GitHub Pages。`;
 
 // Plain-language explanation of what each tool actually does.
 // Each card flips to a concrete "in practice" example.
@@ -51,10 +59,10 @@ const TOOLS = [
     name: 'ArcGIS Maps SDK',
     role: 'The core engine',
     features: [
-      { icon: MapIcon, label: '2D Maps' },
-      { icon: Boxes, label: '3D Scenes' },
-      { icon: ImageIcon, label: 'Imagery' },
-      { icon: Radio, label: 'Real-time' },
+      { icon: MapIcon, label: '2D Maps', zh: { label: '2D 地圖' } },
+      { icon: Boxes, label: '3D Scenes', zh: { label: '3D 場景' } },
+      { icon: ImageIcon, label: 'Imagery', zh: { label: '影像' } },
+      { icon: Radio, label: 'Real-time', zh: { label: '即時' } },
     ],
     body: 'The ArcGIS Maps SDK for JavaScript renders interactive 2D maps and 3D scenes, connects to feature services, imagery and real-time streams, and ships ready-made widgets and spatial analysis, so any data source becomes an explorable map.',
     note: (
@@ -73,6 +81,13 @@ const TOOLS = [
     practiceTitle: 'The Premium Developer Toolkit.',
     practice:
       'Esri’s core API brings high-performance location intelligence directly into the browser. It combines lightning-fast rendering of massive 2D and 3D datasets with a rich library of ready-to-use spatial widgets. This allows us to rapidly build tailored, highly interactive apps where your team can visualize, analyze, and edit data without needing desktop GIS.',
+    zh: {
+      role: '核心引擎',
+      body: 'ArcGIS Maps SDK for JavaScript 能繪製互動式 2D 地圖與 3D 場景，連接圖徵服務、影像與即時串流，並內建現成的 Widget 與空間分析功能，讓任何資料來源都能變成可探索的地圖。',
+      practiceTitle: '頂級的開發者工具套件。',
+      practice:
+        'Esri 的核心 API 將高效能的位置智慧直接帶進瀏覽器。它結合大量 2D 與 3D 資料集的極速繪製，以及豐富且開箱即用的空間 Widget 函式庫，讓我們能快速打造量身訂做、高度互動的應用程式；您的團隊無需桌面版 GIS，就能視覺化、分析與編輯資料。',
+    },
   },
   {
     icon: Atom,
@@ -80,10 +95,10 @@ const TOOLS = [
     name: 'React',
     role: 'The interface layer',
     features: [
-      { icon: Component, label: 'Components' },
-      { icon: LayoutDashboard, label: 'Dashboards' },
-      { icon: SlidersHorizontal, label: 'Filters' },
-      { icon: ChartLine, label: 'Charts' },
+      { icon: Component, label: 'Components', zh: { label: '元件' } },
+      { icon: LayoutDashboard, label: 'Dashboards', zh: { label: '儀表板' } },
+      { icon: SlidersHorizontal, label: 'Filters', zh: { label: '篩選器' } },
+      { icon: ChartLine, label: 'Charts', zh: { label: '圖表' } },
     ],
     body: 'React is the supporting interface layer we wrap around the map: reusable panels, filters and charts that stay in sync with your data. It is a popular choice for this, not a requirement. The SDK runs just as happily with Angular, Vue, web components or plain JavaScript.',
     note: '// supporting UI layer',
@@ -92,6 +107,14 @@ const TOOLS = [
     practiceTitle: 'Seamless User Experience.',
     practice:
       'React is the frontend chassis wrapped around the ArcGIS engine. It binds custom dashboards to the map and delivers the fast, intuitive experience your users expect, without page reloads.',
+    zh: {
+      role: '介面層',
+      body: 'React 是包覆在地圖外層的輔助介面層：可重複使用的面板、篩選器與圖表，並與您的資料保持同步。它是熱門的選擇，但並非必要；SDK 搭配 Angular、Vue、Web Components 或純 JavaScript 同樣運作順暢。',
+      note: '// 輔助 UI 層',
+      practiceTitle: '流暢無縫的使用者體驗。',
+      practice:
+        'React 是包覆 ArcGIS 引擎的前端骨架，將客製化儀表板與地圖連動，提供使用者期待的快速、直覺體驗，完全不需重新載入頁面。',
+    },
   },
   {
     icon: Zap,
@@ -99,10 +122,10 @@ const TOOLS = [
     name: 'Vite',
     role: 'The build tool & dev server',
     features: [
-      { icon: Zap, label: 'Instant HMR' },
-      { icon: Package, label: 'Bundling' },
-      { icon: Server, label: 'Dev Server' },
-      { icon: Gauge, label: 'Fast Builds' },
+      { icon: Zap, label: 'Instant HMR', zh: { label: '即時 HMR' } },
+      { icon: Package, label: 'Bundling', zh: { label: '打包' } },
+      { icon: Server, label: 'Dev Server', zh: { label: '開發伺服器' } },
+      { icon: Gauge, label: 'Fast Builds', zh: { label: '快速建置' } },
     ],
     body: 'Vite is the supporting build tooling. It serves the project instantly while you develop and, for release, bundles everything (including the heavy ArcGIS SDK) into small static files any host can serve. Fast, and swappable for any modern bundler.',
     note: 'npm run dev · npm run build',
@@ -111,6 +134,13 @@ const TOOLS = [
     practiceTitle: 'Lightning-Fast Delivery.',
     practice:
       'Vite is the modern build tool that makes rapid prototyping possible. It allows us to iterate on custom solutions live, meaning you get to see, tweak, and interact with your digital deliverables in days, not months.',
+    zh: {
+      role: '建置工具與開發伺服器',
+      body: 'Vite 是輔助的建置工具。開發時，它能即時提供專案預覽；發布時，則將所有內容（包括龐大的 ArcGIS SDK）打包成任何主機都能提供的精簡靜態檔案。速度快，也能替換成任何現代打包工具。',
+      practiceTitle: '閃電般的交付速度。',
+      practice:
+        'Vite 是讓快速原型開發成為可能的現代建置工具。它讓我們能即時迭代客製化解決方案，意味著您只需幾天而非幾個月，就能看到、調整並操作您的數位成果。',
+    },
   },
   {
     icon: Bot,
@@ -120,10 +150,10 @@ const TOOLS = [
     name: 'GitHub Copilot',
     role: 'The AI pair-programmer',
     features: [
-      { icon: Sparkles, label: 'Autocomplete' },
-      { icon: Code, label: 'Writes Code' },
-      { icon: WandSparkles, label: 'Scaffolding' },
-      { icon: MessageSquare, label: 'Prompt-driven' },
+      { icon: Sparkles, label: 'Autocomplete', zh: { label: '自動完成' } },
+      { icon: Code, label: 'Writes Code', zh: { label: '撰寫程式碼' } },
+      { icon: WandSparkles, label: 'Scaffolding', zh: { label: '專案骨架' } },
+      { icon: MessageSquare, label: 'Prompt-driven', zh: { label: '提示詞驅動' } },
     ],
     body: 'Copilot reads the user’s prompt and the surrounding code, then writes the React + ArcGIS implementation, scaffolding files, wiring APIs and completing whole functions. It turns plain-language intent into working code, with the user steering every decision.',
     note: 'prompt → working code',
@@ -133,10 +163,19 @@ const TOOLS = [
     practiceTitle: 'The Force Multiplier.',
     practice:
       'You define the plain-language business requirements; the AI handles the complex syntax. Copilot instantly generates the underlying code structure, turning hours of manual development into rapid, precise solutions tailored exactly to your workflows.',
+    zh: {
+      role: 'AI 結對程式設計夥伴',
+      body: 'Copilot 讀取使用者的提示詞與周邊程式碼，接著撰寫 React + ArcGIS 的實作：建立專案檔案、串接 API，甚至完成整個函式。它將白話的意圖轉化為可運作的程式碼，而每個決策都由使用者掌舵。',
+      action: <CopyPromptButton prompt={COPILOT_STARTER_PROMPT_ZH} />,
+      practiceTitle: '戰力倍增器。',
+      practice:
+        '您用白話定義業務需求，AI 處理複雜的語法。Copilot 能即時產生底層程式碼架構，把原本數小時的手動開發，變成快速、精準且完全貼合您工作流程的解決方案。',
+    },
   },
 ];
 
 export function TechStack() {
+  const { tr, loc } = useI18n();
   return (
     <section
       id="toolchain"
@@ -149,21 +188,27 @@ export function TechStack() {
           <span className="font-mono text-sm text-neon-blue">05</span>
           <span className="h-px w-12 bg-gradient-to-r from-neon-blue to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            The Toolchain
+            {tr('The Toolchain', '工具鏈')}
           </span>
         </div>
 
         <SectionHeading
           align="left"
           icon={Wrench}
-          eyebrow="Under the Hood"
-          title={
+          eyebrow={tr('Under the Hood', '背後的技術')}
+          title={tr(
             <>
               What each tool is{' '}
               <span className="text-gradient">actually doing</span>
+            </>,
+            <>
+              每項工具<span className="text-gradient">實際上在做什麼</span>
             </>
-          }
-          subtitle="The stack is deliberately small. One tool does the heavy lifting, the ArcGIS Maps SDK for JavaScript, while React, Vite and GitHub Copilot are the lean supporting cast that make building with it fast. Flip a card to see each in practice."
+          )}
+          subtitle={tr(
+            'The stack is deliberately small. One tool does the heavy lifting, the ArcGIS Maps SDK for JavaScript, while React, Vite and GitHub Copilot are the lean supporting cast that make building with it fast. Flip a card to see each in practice.',
+            '這套技術堆疊刻意保持精簡。最繁重的工作由 ArcGIS Maps SDK for JavaScript 一手包辦，React、Vite 與 GitHub Copilot 則是精實的配角，讓您能更快地運用它進行開發。翻轉卡片，看看各項工具的實際應用。'
+          )}
           className="mb-14"
         />
 
@@ -174,14 +219,14 @@ export function TechStack() {
           viewport={viewport}
           className="grid gap-6 sm:grid-cols-2"
         >
-          {TOOLS.map((t) => (
+          {TOOLS.map(loc).map((t) => (
             <FlipCard
               key={t.name}
               color={t.color}
               height="h-[22rem]"
               className={t.featured ? 'sm:col-span-2' : ''}
-              frontHint="In practice"
-              backHint="Back"
+              frontHint={tr('In practice', '實際應用')}
+              backHint={tr('Back', '返回')}
               front={
                 <>
                   {/* featured brand visual fills the empty right side */}
@@ -251,7 +296,7 @@ export function TechStack() {
                               className="h-3.5 w-3.5"
                               style={{ color: t.color }}
                             />
-                            {f.label}
+                            {loc(f).label}
                           </span>
                         ))}
                       </div>
@@ -289,7 +334,7 @@ export function TechStack() {
                       className="h-4 w-4 shrink-0"
                       style={{ color: t.color }}
                     />
-                    {t.name} · In practice
+                    {t.name} · {tr('In practice', '實際應用')}
                   </p>
                   <div className="mb-2.5 flex items-center gap-2.5 pr-16">
                     <span
@@ -333,18 +378,38 @@ export function TechStack() {
           viewport={viewport}
           className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-2xl glass px-6 py-5 text-center text-sm text-slate-300"
         >
-          <span className="font-semibold text-neon-cyan">The user</span>
-          <span className="text-slate-500">directs</span>
-          <span className="font-semibold text-neon-violet">Copilot</span>
-          <span className="text-slate-500">to build on the</span>
-          <span className="font-semibold text-neon-blue">ArcGIS Maps SDK</span>
-          <ArrowRight className="h-4 w-4 text-slate-600" />
-          <span className="text-slate-500">wrapped in</span>
-          <span className="font-semibold text-neon-cyan">React</span>
-          <span className="text-slate-500">, served by</span>
-          <span className="font-semibold text-neon-amber">Vite</span>
-          <ArrowRight className="h-4 w-4 text-slate-600" />
-          <span className="font-semibold text-white">a shipped app</span>
+          {tr(
+            <>
+              <span className="font-semibold text-neon-cyan">The user</span>
+              <span className="text-slate-500">directs</span>
+              <span className="font-semibold text-neon-violet">Copilot</span>
+              <span className="text-slate-500">to build on the</span>
+              <span className="font-semibold text-neon-blue">ArcGIS Maps SDK</span>
+              <ArrowRight className="h-4 w-4 text-slate-600" />
+              <span className="text-slate-500">wrapped in</span>
+              <span className="font-semibold text-neon-cyan">React</span>
+              <span className="text-slate-500">, served by</span>
+              <span className="font-semibold text-neon-amber">Vite</span>
+              <ArrowRight className="h-4 w-4 text-slate-600" />
+              <span className="font-semibold text-white">a shipped app</span>
+            </>,
+            <>
+              <span className="font-semibold text-neon-cyan">使用者</span>
+              <span className="text-slate-500">指揮</span>
+              <span className="font-semibold text-neon-violet">Copilot</span>
+              <span className="text-slate-500">在</span>
+              <span className="font-semibold text-neon-blue">ArcGIS Maps SDK</span>
+              <span className="text-slate-500">上建置</span>
+              <ArrowRight className="h-4 w-4 text-slate-600" />
+              <span className="text-slate-500">以</span>
+              <span className="font-semibold text-neon-cyan">React</span>
+              <span className="text-slate-500">包裝，由</span>
+              <span className="font-semibold text-neon-amber">Vite</span>
+              <span className="text-slate-500">提供服務</span>
+              <ArrowRight className="h-4 w-4 text-slate-600" />
+              <span className="font-semibold text-white">一個上線的應用程式</span>
+            </>
+          )}
         </motion.div>
       </div>
     </section>

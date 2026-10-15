@@ -10,17 +10,19 @@ import {
 import { GithubIcon } from './ui/GithubIcon';
 import esriDevelopers from '../assets/esri-developers.png';
 import { fadeUp, stagger, viewport } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 const BOILERPLATE_URL = 'https://github.com/Esri';
 
 const RECAP = [
-  { icon: BrainCircuit, label: 'Human', color: 'var(--color-neon-cyan)' },
-  { icon: Terminal, label: 'Prompt', color: 'var(--color-neon-violet)' },
+  { icon: BrainCircuit, label: 'Human', color: 'var(--color-neon-cyan)', zh: { label: '人類' } },
+  { icon: Terminal, label: 'Prompt', color: 'var(--color-neon-violet)', zh: { label: '提示詞' } },
   { icon: Cpu, label: 'AI', color: 'var(--color-neon-pink)' },
-  { icon: Boxes, label: 'Custom App', color: 'var(--color-neon-blue)' },
+  { icon: Boxes, label: 'Custom App', color: 'var(--color-neon-blue)', zh: { label: '客製化 App' } },
 ];
 
 export function Footer() {
+  const { tr, loc } = useI18n();
   return (
     <footer className="relative overflow-hidden px-4 pt-24 sm:px-6">
       {/* glow floor */}
@@ -48,7 +50,7 @@ export function Footer() {
                   <step.icon className="h-5 w-5" style={{ color: step.color }} />
                 </span>
                 <span className="text-[11px] font-medium text-slate-400">
-                  {step.label}
+                  {loc(step).label}
                 </span>
               </div>
               {i < RECAP.length - 1 && (
@@ -62,18 +64,28 @@ export function Footer() {
           variants={fadeUp}
           className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl md:text-6xl"
         >
-          Let&apos;s build the{' '}
-          <span className="text-gradient-animated">future of mapping</span>
-          <br className="hidden sm:block" /> together.
+          {tr(
+            <>
+              Let&apos;s build the{' '}
+              <span className="text-gradient-animated">future of mapping</span>
+              <br className="hidden sm:block" /> together.
+            </>,
+            <>
+              讓我們攜手打造
+              <br />
+              <span className="text-gradient-animated">製圖的未來</span>。
+            </>
+          )}
         </motion.h2>
 
         <motion.p
           variants={fadeUp}
           className="mx-auto mt-5 max-w-xl text-base text-slate-300/80 sm:text-lg"
         >
-          Your domain expertise, assisted by AI, rendered into powerful business
-          value applications. Use this framework and explore the architecture
-          examples to start building your own custom ArcGIS solutions today.
+          {tr(
+            'Your domain expertise, assisted by AI, rendered into powerful business value applications. Use this framework and explore the architecture examples to start building your own custom ArcGIS solutions today.',
+            '以您的領域專業為核心，在 AI 的輔助下，打造出具有強大商業價值的應用程式。運用這套框架並探索架構範例，今天就開始建置您專屬的客製化 ArcGIS 解決方案。'
+          )}
         </motion.p>
 
         <motion.div
@@ -87,7 +99,7 @@ export function Footer() {
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-blue px-6 py-3 text-sm font-semibold text-ink-950 transition-transform hover:scale-[1.03]"
           >
             <GithubIcon className="h-4 w-4" />
-            Visit Esri on GitHub
+            {tr('Visit Esri on GitHub', '前往 Esri 的 GitHub')}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
         </motion.div>
@@ -101,7 +113,7 @@ export function Footer() {
         className="relative mx-auto mt-16 flex max-w-4xl flex-wrap items-center justify-center gap-2.5"
       >
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-          Leveraging
+          {tr('Leveraging', '採用技術')}
         </span>
         {[
           {
@@ -141,11 +153,14 @@ export function Footer() {
             className="h-7 w-7 rounded-lg"
           />
           <span className="text-sm font-semibold text-white">
-            Develop with <span className="text-gradient">ArcGIS</span>
+            {tr(
+              <>Develop with <span className="text-gradient">ArcGIS</span></>,
+              <>使用 <span className="text-gradient">ArcGIS</span> 開發</>
+            )}
           </span>
         </a>
         <p className="text-xs text-slate-500">
-          © {new Date().getFullYear()} · ArcGIS × Data × AI
+          © {new Date().getFullYear()} · ArcGIS × {tr('Data', '資料')} × AI
         </p>
       </div>
     </footer>

@@ -44,6 +44,12 @@
   --animate-shimmer: shimmer 2.5s linear infinite;
 }
 
+/* Traditional Chinese: Latin glyphs keep the brand fonts, CJK falls back to Taiwan system fonts */
+html:lang(zh) {
+  --font-sans: 'Inter', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', 'Noto Sans CJK TC', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', 'Noto Sans CJK TC', ui-sans-serif, system-ui, sans-serif;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Keyframes                                                          */
 /* ------------------------------------------------------------------ */

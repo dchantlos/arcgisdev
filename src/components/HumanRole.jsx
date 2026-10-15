@@ -21,6 +21,7 @@ import { SectionHeading } from './ui/SectionHeading';
 import { GlassCard } from './ui/GlassCard';
 import { TiltCard } from './ui/TiltCard';
 import { fadeUp, stagger, viewport, fromRight } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 // The data & systems that get fused into a single ArcGIS app. Colour-coded by
 // origin: ArcGIS-native (blue) vs. external enterprise data (purple).
@@ -32,6 +33,10 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'Drone photogrammetry & 360° imagery turned into measurable context.',
+    zh: {
+      label: '實景擷取',
+      desc: '無人機攝影測量與 360° 環景影像，轉化為可量測的空間脈絡。',
+    },
   },
   {
     id: 'pointcloud',
@@ -40,6 +45,10 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'LiDAR & survey scans, with millions of precise 3D points.',
+    zh: {
+      label: '點雲',
+      desc: 'LiDAR 與測量掃描資料，包含數百萬個精確的 3D 點位。',
+    },
   },
   {
     id: 'bim',
@@ -48,6 +57,9 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'Federated building & engineering models with full metadata.',
+    zh: {
+      desc: '整合後的建築與工程模型，保留完整的詮釋資料。',
+    },
   },
   {
     id: 'splat',
@@ -56,6 +68,10 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'Photoreal radiance-field capture for stunning fidelity.',
+    zh: {
+      label: '高斯潑濺',
+      desc: '以輻射場技術擷取的寫實場景，呈現驚人的逼真度。',
+    },
   },
   {
     id: 'imagery',
@@ -64,6 +80,10 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'Satellite, aerial & multiband imagery analysis.',
+    zh: {
+      label: '影像與網格',
+      desc: '衛星、航空與多波段影像分析。',
+    },
   },
   {
     id: 'features',
@@ -72,6 +92,10 @@ const LAYERS = [
     group: 'native',
     color: 'var(--color-neon-blue)',
     desc: 'Hosted GIS layers: points, lines, polygons & attributes.',
+    zh: {
+      label: '圖徵圖層',
+      desc: '託管的 GIS 圖層：點、線、多邊形與屬性。',
+    },
   },
   {
     id: 'sensor',
@@ -80,6 +104,10 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'Live device telemetry streamed straight onto the map.',
+    zh: {
+      label: '感測器 / IoT',
+      desc: '裝置的即時遙測資料，直接串流到地圖上。',
+    },
   },
   {
     id: 'realtime',
@@ -88,6 +116,10 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'Moving assets & events, updating by the second.',
+    zh: {
+      label: '即時串流',
+      desc: '移動中的資產與事件，每秒即時更新。',
+    },
   },
   {
     id: 'databricks',
@@ -96,6 +128,9 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'Lakehouse tables & notebooks joined to map features.',
+    zh: {
+      desc: 'Lakehouse 資料表與 Notebook，結合到地圖圖徵上。',
+    },
   },
   {
     id: 'warehouse',
@@ -104,6 +139,10 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'Enterprise data lakes and warehouses, spatially enabled.',
+    zh: {
+      label: '資料湖與資料倉儲',
+      desc: '為企業資料湖與資料倉儲賦予空間能力。',
+    },
   },
   {
     id: 'apis',
@@ -112,6 +151,10 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'REST services & business systems wired in as live layers.',
+    zh: {
+      label: '業務 API',
+      desc: 'REST 服務與業務系統，串接成即時圖層。',
+    },
   },
   {
     id: 'bi',
@@ -120,10 +163,15 @@ const LAYERS = [
     group: 'enterprise',
     color: 'var(--color-neon-violet)',
     desc: 'KPIs & dashboards rendered on the geography they describe.',
+    zh: {
+      label: '分析與 BI',
+      desc: '將 KPI 與儀表板呈現在其所描述的地理範圍上。',
+    },
   },
 ];
 
 export function HumanRole() {
+  const { tr, loc } = useI18n();
   const [active, setActive] = useState(
     () => new Set(['reality', 'sensor', 'databricks', 'features'])
   );
@@ -138,8 +186,9 @@ export function HumanRole() {
     });
   };
 
-  const activeLayers = LAYERS.filter((l) => active.has(l.id));
-  const detail = LAYERS.find((l) => l.id === hovered);
+  const activeLayers = LAYERS.filter((l) => active.has(l.id)).map(loc);
+  const hoveredLayer = LAYERS.find((l) => l.id === hovered);
+  const detail = hoveredLayer && loc(hoveredLayer);
 
   return (
     <section id="human" className="relative px-4 py-24 sm:px-6 md:py-32">
@@ -149,21 +198,27 @@ export function HumanRole() {
           <span className="font-mono text-sm text-neon-cyan">02</span>
           <span className="h-px w-12 bg-gradient-to-r from-neon-cyan to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            The Human Brain
+            {tr('The Human Brain', '人類大腦')}
           </span>
         </div>
 
         <SectionHeading
           align="left"
           icon={BrainCircuit}
-          eyebrow="The User's Role · The Visionary"
-          title={
+          eyebrow={tr("The User's Role · The Visionary", '使用者的角色 · 願景擘劃者')}
+          title={tr(
             <>
               It starts with{' '}
               <span className="text-gradient">domain expertise</span>
+            </>,
+            <>
+              一切始於<span className="text-gradient">領域專業</span>
             </>
-          }
-          subtitle="Before a single line of code exists, the user defines the problem worth solving and curates the data: reality capture, sensors, Databricks, warehouses, GIS layers and more, georeferencing and aligning wildly different systems into one coherent foundation."
+          )}
+          subtitle={tr(
+            'Before a single line of code exists, the user defines the problem worth solving and curates the data: reality capture, sensors, Databricks, warehouses, GIS layers and more, georeferencing and aligning wildly different systems into one coherent foundation.',
+            '在寫下第一行程式碼之前，使用者先定義值得解決的問題並彙整資料：實景擷取、感測器、Databricks、資料倉儲、GIS 圖層等，並透過地理參考，將差異極大的各種系統對齊，整合為一致的基礎。'
+          )}
           className="mb-14"
         />
 
@@ -179,27 +234,33 @@ export function HumanRole() {
             <TiltCard glow="cyan" animate={false} className="p-6">
               <PencilRuler className="mb-4 h-8 w-8 text-neon-cyan" />
               <h3 className="mb-2 text-xl font-semibold text-white">
-                The Visionary
+                {tr('The Visionary', '願景擘劃者')}
               </h3>
               <p className="text-sm leading-relaxed text-slate-300/80">
-                The user translates real business problems, such as operational
-                risk, faster decisions, and public engagement, into a clear
-                product vision with tangible value, across any industry.
+                {tr(
+                  'The user translates real business problems, such as operational risk, faster decisions, and public engagement, into a clear product vision with tangible value, across any industry.',
+                  '使用者將實際的業務問題，例如營運風險、加速決策與民眾參與，轉化為具有實質價值的清晰產品願景，適用於各行各業。'
+                )}
               </p>
             </TiltCard>
 
             <TiltCard glow="violet" animate={false} className="p-6">
               <Compass className="mb-4 h-8 w-8 text-neon-violet" />
               <h3 className="mb-2 text-xl font-semibold text-white">
-                The GIS Expert
+                {tr('The GIS Expert', 'GIS 專家')}
               </h3>
               <p className="text-sm leading-relaxed text-slate-300/80">
-                Deep spatial expertise goes far beyond putting dots on a map.
-                They integrate complex enterprise systems, maintain
-                authoritative data integrity, and perform the advanced spatial
-                analysis that drives daily business operations. They build the
-                robust &apos;single source of truth&apos; that powers the final
-                application.
+                {tr(
+                  <>
+                    Deep spatial expertise goes far beyond putting dots on a map.
+                    They integrate complex enterprise systems, maintain
+                    authoritative data integrity, and perform the advanced spatial
+                    analysis that drives daily business operations. They build the
+                    robust &apos;single source of truth&apos; that powers the final
+                    application.
+                  </>,
+                  '深厚的空間專業遠不只是在地圖上標點。GIS 專家整合複雜的企業系統、維護權威資料的完整性，並執行驅動日常業務運作的進階空間分析，打造出支撐最終應用程式的穩固「單一事實來源」。'
+                )}
               </p>
             </TiltCard>
 
@@ -207,10 +268,10 @@ export function HumanRole() {
             <TiltCard glow="blue" animate={false} className="p-6">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">
-                  Data Integration
+                  {tr('Data Integration', '資料整合')}
                 </h3>
                 <span className="rounded-md bg-neon-cyan/15 px-2 py-1 font-mono text-xs text-neon-cyan">
-                  {activeLayers.length} / {LAYERS.length} sources
+                  {activeLayers.length} / {LAYERS.length} {tr('sources', '個來源')}
                 </span>
               </div>
               {/* stacked layer bars */}
@@ -239,7 +300,7 @@ export function HumanRole() {
                 </AnimatePresence>
                 {activeLayers.length === 0 && (
                   <p className="py-3 text-center text-xs text-slate-500">
-                    Toggle sources to compose an app →
+                    {tr('Toggle sources to compose an app →', '切換資料來源，組合出應用程式 →')}
                   </p>
                 )}
               </div>
@@ -255,7 +316,7 @@ export function HumanRole() {
           >
             <GlassCard glow="cyan" animate={false} className="h-full p-6">
               <h3 className="mb-3 text-lg font-semibold text-white">
-                Integrate any data or system
+                {tr('Integrate any data or system', '整合任何資料或系統')}
               </h3>
               {/* legend: ArcGIS-native vs external enterprise data */}
               <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
@@ -264,17 +325,17 @@ export function HumanRole() {
                     className="h-2.5 w-2.5 rounded-full bg-neon-blue"
                     style={{ boxShadow: '0 0 8px var(--color-neon-blue)' }}
                   />
-                  ArcGIS Native
+                  {tr('ArcGIS Native', 'ArcGIS 原生')}
                 </span>
                 <span className="flex items-center gap-1.5 font-medium text-slate-300">
                   <span
                     className="h-2.5 w-2.5 rounded-full bg-neon-violet"
                     style={{ boxShadow: '0 0 8px var(--color-neon-violet)' }}
                   />
-                  Enterprise Data
+                  {tr('Enterprise Data', '企業資料')}
                 </span>
                 <span className="ml-auto hidden font-mono text-slate-400 sm:block">
-                  click to toggle
+                  {tr('click to toggle', '點選即可切換')}
                 </span>
               </div>
 
@@ -320,7 +381,7 @@ export function HumanRole() {
                           on ? 'text-white' : 'text-slate-400'
                         }`}
                       >
-                        {l.label}
+                        {loc(l).label}
                       </span>
                       {on && (
                         <motion.span
@@ -385,8 +446,13 @@ export function HumanRole() {
                         ))}
                       </div>
                       <p className="max-w-[16rem] text-left text-xs text-slate-400">
-                        One georeferenced foundation: any data, any system,
-                        aligned by hand before AI writes a line of code.
+                        {tr(
+                          <>
+                            One georeferenced foundation: any data, any system,
+                            aligned by hand before AI writes a line of code.
+                          </>,
+                          '單一的地理參考基礎：任何資料、任何系統，都在 AI 寫下第一行程式碼之前，由人工完成對齊。'
+                        )}
                       </p>
                     </motion.div>
                   )}

@@ -18,6 +18,7 @@ import {
 import { SectionHeading } from './ui/SectionHeading';
 import { TiltCard } from './ui/TiltCard';
 import { fadeUp } from '../lib/motion';
+import { useI18n } from '../i18n/lang';
 
 // ---------------------------------------------------------------------------
 // Path 1 - the straightforward version: five plain-language beats of the
@@ -32,6 +33,10 @@ const STEPS = [
     glow: 'cyan',
     color: 'var(--color-neon-cyan)',
     body: 'You curate all your information and know where it resides, integrating business systems, design data and spatial context that define all aspects of the project.',
+    zh: {
+      title: '盤點與整合',
+      body: '您盤點所有資訊，清楚掌握資料存放的位置，並整合業務系統、設計資料與空間脈絡，這些正是定義專案各個面向的基礎。',
+    },
   },
   {
     n: '02',
@@ -40,6 +45,10 @@ const STEPS = [
     glow: 'violet',
     color: 'var(--color-neon-violet)',
     body: 'You define the problem worth solving and the business outcome that matters.',
+    zh: {
+      title: '輸入與理解',
+      body: '您定義值得解決的問題，以及真正重要的業務成果。',
+    },
   },
   {
     n: '03',
@@ -48,6 +57,10 @@ const STEPS = [
     glow: 'pink',
     color: 'var(--color-neon-pink)',
     body: 'You describe the app, UI and ArcGIS behaviour in natural language. You own the logic; the AI writes the syntax.',
+    zh: {
+      title: '以自然語言指揮',
+      body: '您用自然語言描述應用程式、使用者介面與 ArcGIS 的行為。邏輯由您掌握，語法交給 AI 撰寫。',
+    },
   },
   {
     n: '04',
@@ -56,6 +69,10 @@ const STEPS = [
     glow: 'amber',
     color: 'var(--color-neon-amber)',
     body: 'AI builds the application using ArcGIS Developer SDKs and other necessary toolkits to build the code, then checks and debugs its own work.',
+    zh: {
+      title: '建置與驗證',
+      body: 'AI 運用 ArcGIS 開發者 SDK 與其他必要的工具套件撰寫程式碼、建置應用程式，接著自行檢查並除錯。',
+    },
   },
   {
     n: '05',
@@ -64,6 +81,10 @@ const STEPS = [
     glow: 'green',
     color: 'var(--color-neon-green)',
     body: 'A finished, custom ArcGIS web app, clean and deploy-ready in one command.',
+    zh: {
+      title: '可部署的應用程式',
+      body: '一個完成的客製化 ArcGIS 網頁應用程式，程式碼簡潔，一個指令即可部署。',
+    },
   },
 ];
 
@@ -89,6 +110,18 @@ const ROLES = [
     glow: 'amber',
     color: 'var(--color-neon-amber)',
     gradient: 'bg-gradient-to-b from-neon-amber/10 to-transparent',
+    zh: {
+      title: '指揮（您）',
+      body: (
+        <>
+          您提供願景、商業邏輯與提示工程，同時帶來
+          <span className="font-semibold text-neon-amber">
+            您已製作好的 ArcGIS Web 服務、地圖、場景及其他資料整合
+          </span>
+          ，這些都是 Copilot 組合成客製化應用程式的基礎。
+        </>
+      ),
+    },
   },
   {
     title: 'The Band (GitHub Copilot)',
@@ -110,6 +143,22 @@ const ROLES = [
     glow: 'cyan',
     color: 'var(--color-neon-cyan)',
     gradient: 'bg-gradient-to-b from-neon-cyan/10 to-transparent',
+    zh: {
+      title: '樂團（GitHub Copilot）',
+      body: (
+        <>
+          AI 理解您的指揮，寫出複雜的語法與樣板程式碼，甚至會
+          <span className="font-semibold text-neon-cyan">
+            自行檢查並除錯自己的程式碼
+          </span>
+          ，最後將應用程式打包成
+          <span className="font-semibold text-neon-cyan">
+            簡潔、可立即部署的建置版本
+          </span>
+          。
+        </>
+      ),
+    },
   },
   {
     title: 'The Instruments (Developer Toolkits)',
@@ -133,6 +182,18 @@ const ROLES = [
       { label: 'React', lead: false },
       { label: 'Vite', lead: false },
     ],
+    zh: {
+      title: '樂器（開發者工具套件）',
+      body: (
+        <>
+          <span className="font-semibold text-neon-blue">
+            ArcGIS Maps SDK for JavaScript
+          </span>{' '}
+          是主奏樂器，負責地圖、場景與空間分析的旋律；React 與 Vite
+          則是伴奏聲部，負責襯托並傳遞這段旋律。
+        </>
+      ),
+    },
   },
 ];
 
@@ -166,7 +227,9 @@ function badgeStyle(color) {
   };
 }
 
-function StepCard({ step }) {
+function StepCard({ step: source }) {
+  const { loc } = useI18n();
+  const step = loc(source);
   const Icon = step.icon;
   return (
     <TiltCard glow={step.glow} animate={false} className="p-5">
@@ -195,16 +258,17 @@ function StepCard({ step }) {
 }
 
 function StraightPath({ onMetaphor }) {
+  const { tr, loc } = useI18n();
   return (
     <div>
       {/* kicker */}
       <motion.div variants={fadeUp} className="mb-8 flex items-center gap-4">
         <span className="text-sm font-semibold uppercase tracking-[0.28em] text-neon-cyan">
-          AI-Assisted Engineering
+          {tr('AI-Assisted Engineering', 'AI 輔助工程')}
         </span>
         <span className="h-px flex-1 bg-gradient-to-r from-neon-cyan/40 to-transparent" />
         <span className="hidden text-xs font-medium uppercase tracking-[0.2em] text-slate-500 sm:block">
-          The Next Leap
+          {tr('The Next Leap', '下一個飛躍')}
         </span>
       </motion.div>
 
@@ -239,7 +303,7 @@ function StraightPath({ onMetaphor }) {
           {STEPS.map((step) => (
             <div key={step.n} className="flex items-center gap-3">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-300 sm:text-xs">
-                {step.title}
+                {loc(step).title}
               </span>
               <ChevronsRight
                 className="h-4 w-4"
@@ -257,7 +321,7 @@ function StraightPath({ onMetaphor }) {
                 'color-mix(in oklab, var(--color-neon-green) 15%, transparent)',
             }}
           >
-            Ready to Ship
+            {tr('Ready to Ship', '準備上線')}
           </span>
         </div>
       </motion.div>
@@ -273,7 +337,10 @@ function StraightPath({ onMetaphor }) {
           className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 glass px-5 py-3 text-sm font-semibold text-slate-200 transition-all hover:border-neon-violet/50 hover:text-white hover:shadow-glow-violet"
         >
           <Music className="h-4 w-4 text-neon-violet" />
-          Understand this same process in terms of how an orchestra operates
+          {tr(
+            'Understand this same process in terms of how an orchestra operates',
+            '用管弦樂團的運作方式，理解同一套流程'
+          )}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
       </motion.div>
@@ -282,6 +349,7 @@ function StraightPath({ onMetaphor }) {
 }
 
 function OrchestraPath({ onBack }) {
+  const { tr, loc } = useI18n();
   return (
     <div>
       {/* back control + lead-in */}
@@ -295,10 +363,10 @@ function OrchestraPath({ onBack }) {
           className="group inline-flex items-center gap-2 rounded-full border border-white/10 glass px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-300 transition-all hover:border-neon-cyan/50 hover:text-white"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
-          Back to the straightforward version
+          {tr('Back to the straightforward version', '回到簡明版本')}
         </button>
         <span className="text-sm font-semibold uppercase tracking-[0.28em] text-neon-violet">
-          The Orchestra
+          {tr('The Orchestra', '管弦樂團')}
         </span>
         <span className="h-px flex-1 bg-gradient-to-r from-neon-violet/40 to-transparent" />
       </motion.div>
@@ -307,18 +375,27 @@ function OrchestraPath({ onBack }) {
         variants={fadeUp}
         className="mb-10 max-w-3xl text-base leading-relaxed text-slate-300/85 sm:text-lg"
       >
-        Building modern GIS applications with AI is like conducting an orchestra.
-        You don&apos;t need to know how to play every instrument (code) to create
-        a masterpiece (ROI). You direct, Copilot plays, and the developer
-        toolkits are the instruments.
+        {tr(
+          <>
+            Building modern GIS applications with AI is like conducting an orchestra.
+            You don&apos;t need to know how to play every instrument (code) to create
+            a masterpiece (ROI). You direct, Copilot plays, and the developer
+            toolkits are the instruments.
+          </>,
+          <>
+            用 AI 打造現代 GIS 應用程式，就像指揮一支管弦樂團。您不必會演奏每一種樂器（程式碼），也能創造出一部傑作（投資報酬率）。您負責指揮，Copilot
+            負責演奏，而開發者工具套件就是樂器。
+          </>
+        )}
       </motion.p>
 
       {/* three roles: director, band, instruments */}
       <div className="grid gap-6 md:grid-cols-3">
-        {ROLES.map((s) => {
+        {ROLES.map((role) => {
+          const s = loc(role);
           const Icon = s.icon;
           return (
-            <motion.div key={s.title} variants={fadeUp}>
+            <motion.div key={role.title} variants={fadeUp}>
               <TiltCard glow={s.glow} animate={false} className={s.gradient}>
                 <div className="flex h-full flex-col gap-4 p-6 sm:p-7">
                   <span
@@ -340,7 +417,7 @@ function OrchestraPath({ onBack }) {
                             className="inline-flex items-center gap-1.5 rounded-md border border-neon-blue/50 bg-neon-blue/15 px-2 py-0.5 text-[11px] font-semibold text-white"
                           >
                             <span className="text-[9px] font-bold uppercase tracking-wider text-neon-blue">
-                              Lead
+                              {tr('Lead', '主奏')}
                             </span>
                             {p.label}
                           </span>
@@ -369,8 +446,16 @@ function OrchestraPath({ onBack }) {
       >
         <Equalizer />
         <p className="text-xl font-semibold text-slate-200 sm:text-2xl">
-          Your expertise is the score.{' '}
-          <span className="text-gradient">Everything else just plays it.</span>
+          {tr(
+            <>
+              Your expertise is the score.{' '}
+              <span className="text-gradient">Everything else just plays it.</span>
+            </>,
+            <>
+              您的專業就是樂譜，
+              <span className="text-gradient">其他一切只是依譜演奏。</span>
+            </>
+          )}
         </p>
       </motion.div>
     </div>
@@ -378,6 +463,7 @@ function OrchestraPath({ onBack }) {
 }
 
 export function Ensemble() {
+  const { tr } = useI18n();
   const [flipped, setFlipped] = useState(false);
   const frontRef = useRef(null);
   const backRef = useRef(null);
@@ -409,20 +495,25 @@ export function Ensemble() {
           <span className="font-mono text-sm text-neon-cyan">01</span>
           <span className="h-px w-12 bg-gradient-to-r from-neon-cyan to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            How It Works
+            {tr('How It Works', '運作方式')}
           </span>
         </div>
 
         <SectionHeading
           align="left"
           icon={Workflow}
-          eyebrow="Prompt Engineering, Explained"
-          title={
+          eyebrow={tr('Prompt Engineering, Explained', '提示工程解析')}
+          title={tr(
             <>
               How to build custom ArcGIS apps{' '}
               <span className="text-gradient">without being a developer.</span>
+            </>,
+            <>
+              打造客製化 <span className="whitespace-nowrap">ArcGIS App，</span>
+              <br />
+              <span className="text-gradient">不必是開發人員。</span>
             </>
-          }
+          )}
           className="mb-14"
         />
 

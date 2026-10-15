@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Languages, Menu, X } from 'lucide-react';
 import { GithubIcon } from './ui/GithubIcon';
 import esriDevelopers from '../assets/esri-developers.png';
+import { useI18n, ZH } from '../i18n/lang';
 
 const LINKS = [
-  { label: 'How It Works', href: '#ensemble' },
-  { label: 'The Human', href: '#human' },
-  { label: 'The Toolchain', href: '#toolchain' },
-  { label: 'App Catalog', href: '#solutions' },
+  { label: 'How It Works', href: '#ensemble', zh: { label: '運作方式' } },
+  { label: 'The Human', href: '#human', zh: { label: '人的角色' } },
+  { label: 'The Toolchain', href: '#toolchain', zh: { label: '工具鏈' } },
+  { label: 'App Catalog', href: '#solutions', zh: { label: '應用程式目錄' } },
 ];
 
 const GITHUB_PROFILE = 'https://github.com/Esri';
@@ -22,6 +23,7 @@ export function Navbar() {
   });
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { isZh, setLang, tr, loc } = useI18n();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -59,8 +61,11 @@ export function Navbar() {
             />
             <span className="absolute inset-0 -z-10 rounded-xl bg-neon-blue/40 opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-100" />
           </span>
-          <span className="block text-sm font-semibold tracking-tight text-white">
-            Develop with <span className="text-gradient">ArcGIS</span>
+          <span className="block break-keep text-sm font-semibold tracking-tight text-white">
+            {tr(
+              <>Develop with <span className="text-gradient">ArcGIS</span></>,
+              <>使用 <span className="text-gradient">ArcGIS</span> 開發</>
+            )}
           </span>
         </a>
 
@@ -72,14 +77,26 @@ export function Navbar() {
               href={l.href}
               className="relative rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition-colors hover:text-white"
             >
-              <span className="relative z-10">{l.label}</span>
+              <span className="relative z-10">{loc(l).label}</span>
               <span className="absolute inset-0 -z-0 scale-90 rounded-lg bg-white/5 opacity-0 transition-all duration-200 hover:scale-100 hover:opacity-100" />
             </a>
           ))}
         </div>
 
         {/* CTA + mobile toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Label is in the target language so each audience can find it */}
+          <button
+            type="button"
+            onClick={() => setLang(isZh ? 'en' : ZH)}
+            lang={isZh ? 'en' : ZH}
+            aria-label={isZh ? 'Switch to English' : '切換為繁體中文'}
+            title={isZh ? 'Switch to English' : '切換為繁體中文'}
+            className="group inline-flex items-center gap-1.5 whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-2.5 py-2 text-sm font-semibold text-white transition-all hover:border-neon-cyan/50 hover:shadow-glow-cyan sm:px-3"
+          >
+            <Languages className="hidden h-4 w-4 text-neon-cyan transition-transform group-hover:scale-110 sm:block" />
+            {isZh ? 'EN' : '中文'}
+          </button>
           <a
             href={GITHUB_PROFILE}
             target="_blank"
@@ -91,7 +108,7 @@ export function Navbar() {
           </a>
           <button
             type="button"
-            aria-label="Toggle menu"
+            aria-label={tr('Toggle menu', '切換選單')}
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white lg:hidden"
           >
@@ -114,7 +131,7 @@ export function Navbar() {
               onClick={() => setOpen(false)}
               className="rounded-lg px-4 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white"
             >
-              {l.label}
+              {loc(l).label}
             </a>
           ))}
         </motion.div>
