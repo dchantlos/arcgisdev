@@ -1,4 +1,4 @@
-# WORK IN PROGRESS - Develop with ArcGIS Methodology Guide
+#Develop with ArcGIS Methodology Guide
 
 An interactive, single-page explainer that tells the story of how **domain
 expertise**, the **ArcGIS Maps SDK for JavaScript**, and **AI prompt
